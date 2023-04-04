@@ -1,0 +1,14 @@
+crispy-bootstrap5==0.7
+Django
+django-allauth==0.52.0
+django-crispy-forms==1.14.0
+django-debug-toolbar==3.8.1
+whitenoise==6.3.0
+psycopg2-binary==2.9.5
+django-autocomplete-light
+docxtpl
+django-filter
+sshtunnel
+python-dotenv
+mysqlclient
+django-simple-history

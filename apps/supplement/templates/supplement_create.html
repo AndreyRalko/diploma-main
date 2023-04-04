@@ -1,0 +1,59 @@
+{% extends "_base.html" %}
+
+
+{% load static crispy_forms_tags %}
+
+{% block title %}
+       
+
+{% endblock title %}
+
+{% block content %}
+<style>
+    input{
+        width: 100%;
+    }
+    form{
+        width: 100%;
+    }
+</style>
+<form  action="{% url 'supplement_create' %}" method="POST">
+    {% csrf_token %}
+    <select name="facultyID" class="form-control" action="/" method="POST">        
+        {% for Faculty in Faculties %}
+            {% if Faculty.FacultyID == sel_FacultyID %}
+            <option value="{{ Faculty.FacultyID }}" selected> {{Faculty.facultyNameRU}} </option>
+            {% else %}
+            <option value="{{ Faculty.FacultyID }}"> {{Faculty.facultyNameRU}} </option>
+            {% endif %}
+        {% endfor %}        
+    </select>
+    <br>
+    <select name="cafedraID" class="form-control" action="/" method="POST">        
+        {% for cafedra in cafedras %}            
+            <option value="{{ cafedra.cafedraID }}" > {{cafedra.cafedraNameRU}} </option>           
+        {% endfor %}        
+    </select>
+    <br>
+    <input type="submit"  value="выбрать" class="form-control"><br>
+   
+</form>
+<table>
+{% for groupa in groups %}
+    <tr>
+        <td>{{groupa.name}}</td>
+        <td>
+            <form action="group" method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="groupID"  value={{groupa.groupID}}>
+                <input type="submit"  value="выбрать" class="form-control">
+            </form>
+        </td>
+    </tr>            
+    
+{% endfor %}    
+</table>    
+ 
+
+<script type="text/javascript" rrc="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{% endblock content %}

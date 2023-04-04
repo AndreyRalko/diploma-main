@@ -1,0 +1,113 @@
+{% extends "_base.html" %}
+
+{% load static crispy_forms_tags %}
+
+{% block title %}
+    Диплом - {{ object.lastname_kk }} {{ object.firstname_kk }}
+{% endblock title %}
+
+{% block content %}
+    <style>
+        #div_id_status label {
+            display: none;
+        }
+    </style>
+    <div>
+        <div class="container mb-3">
+            <div class="row">
+                <div class="col-6 ps-0">
+                    <form action="{% url 'diploma_detail' object.id %}" method="post">
+                        {% csrf_token %}
+                        {{ status_form|crispy }}
+                        <button class="btn btn-success" type="submit">Сменить статус</button>
+                    </form>
+                </div>
+                <div class="col-6 text-center">
+                    <a href="{% url 'diploma_update' object.id %}"
+                       class="btn btn-outline-warning">Редактировать</a>
+                    <a href="{{ object.docx.url }}" class="btn btn-outline-info">Скачать диплом</a>
+                </div>
+            </div>
+        </div>
+        <div>
+            <b class="me-2">ИИН:</b>{{ object.iin }}
+        </div>
+        <div class="mt-3">
+            <b class="me-2">Имя на казахском:</b>{{ object.firstname_kk }}
+        </div>
+        <div>
+            <b class="me-2">Фамилия на казахском:</b>{{ object.lastname_kk }}
+        </div>
+        {% if object.patronymic_kk %}
+            <div>
+                <b class="me-2">Отчество на казахском:</b>{{ object.patronymic_kk }}
+            </div>
+        {% endif %}
+        <div class="mt-3">
+            <b class="me-2">Имя на английском:</b>{{ object.firstname_en }}
+        </div>
+        <div>
+            <b class="me-2">Фамилия на английском:</b>{{ object.lastname_en }}
+        </div>
+        <div class="mt-3">
+            <b class="me-2">Имя на русском:</b>{{ object.firstname_ru }}
+        </div>
+        <div>
+            <b class="me-2">Фамилия на русском:</b>{{ object.lastname_ru }}
+        </div>
+        {% if object.patronymic_ru %}
+            <div>
+                <b class="me-2">Отчество на русском:</b>{{ object.patronymic_ru }}
+            </div>
+        {% endif %}
+        <div class="mt-3">
+            <b class="me-2">Форма обучения / направление:</b> {{ object.study_form_or_direction.name_kk }} | {{ object.study_form_or_direction.name_en }} | {{ object.study_form_or_direction.name_ru }}
+        </div>
+        <div class="mt-3">
+            <b class="me-2">
+                {% if object.specialty.is_educational_program %}
+                    ОП
+                {% else %}
+                    Специальность
+                {% endif %}
+                :</b> {{ object.specialty.name_kk }} | {{ object.specialty.name_en }} | {{ object.specialty.name_ru }}
+            </div>
+        </div>
+        <div class="mt-3">
+            <b class="me-2">Присваемая степень:</b>
+            <div>
+                <i>На казахском:</i> {{ diploma.conferred_degree.name_kk }} {{ diploma.degree.name_kk|lower }}
+            </div>
+            <div>
+                <i>На английском:</i> {{ diploma.degree.name_en }} in (или of???) {{ diploma.conferred_degree.name_en }}
+            </div>
+            <div>
+                <i>На русском:</i> {{ diploma.degree.name_ru }} {{ diploma.conferred_degree.name_ru }}
+            </div>
+        </div>
+        {% if object.is_honors %}
+            <div class="mt-3">
+                <b class="me-2">Диплом с отличием</b>
+            </div>
+        {% endif %}
+        <div class="mt-3">
+            <div>
+                <b class="me-3">Дата подписания протокола заседания аттестационной комиссии:</b> {{ object.protocol_date }}
+            </div>
+            <div>
+                <b class="me-3">Номер протокола:</b> {{ object.protocol_number }}
+            </div>
+            <div>
+                <b class="me-3">Серия и номер диплома:</b> {{ object.diploma_number }}
+            </div>
+            <div>
+                <b class="me-3">Дата выдачи диплома:</b> {{ object.issue_date }}
+            </div>
+            <div>
+                <b class="me-3">Регистрационный номер диплома:</b> {{ object.registration_number }}
+            </div>
+            <div class="mt-3">
+                <img src="{{ object.qr.url }}" width="200" height="200" alt="QR" />
+            </div>
+        </div>
+    {% endblock content %}

@@ -1,0 +1,79 @@
+{% extends "_base.html" %}
+
+
+{% load static crispy_forms_tags %}
+
+{% block title %}
+       
+
+{% endblock title %}
+
+{% block content %}
+{% for info in common_info %} 
+Сведения о студентах:<br>
+группа:<input type="text" value="{{info.name}}"><br>
+шифр спец-ти на рус.:<input type="text" value="{{info.nameru}} {{info.specializationCode}}"><br>
+шифр спец-ти на каз.:<input type="text" value="{{info.namekz}} {{info.specializationCode}}"><br>
+шифр спец-ти на анг.:<input type="text" value="{{info.nameen}} {{info.specializationCode}}"><br>
+присваиваемая степень на рус.:<input type="text"><br>
+присваиваемая степень на каз.:<input type="text"><br>
+присваиваемая степень на англ.:<input type="text">
+{% endfor %}
+
+<table border="1">
+    <th>№</th>
+    <th>Фамилия (рус)</th>
+    <th>Имя Отчество (рус)</th>
+    <th>Фамилия (каз)</th>
+    <th>Имя Отчество (каз)</th>
+    <th>Фамилия (англ)</th>	
+    <th>Имя Отчество (англ)</th>
+    <th>дата рожд.</th>
+    <th>Предыдущий документ об образовании (рус)</th>
+    <th>Предыдущий документ об образовании (каз)</th>
+    <th>Предыдущий документ об образовании (англ)</th>
+    <th>№</th>
+    <th>дата выдачи</th>
+    <th>вступительные испытания (рус)</th>
+    <th>вступительные испытания (каз)</th>
+    <th>вступительные испытания (англ)</th>
+    <th>сертификат</th>
+    <th>дата выдачи</th>
+    <th>Наименование ВУЗа при поступлении рус.</th>
+    <th>Наименование ВУЗа при поступлении каз.</th>
+    <th>Наименование ВУЗа при поступлении англ.</th>
+    <th>дата поступления в ВУЗ</th>
+    <th>дата окончания ВУЗа</th>
+    {% for Student in Student_Info %} 
+    <tr>
+        <td>1</td>
+        <td><input type="text" value="{{Student.lastname}}"></td>
+        <td><input type="text" value="{{Student.firstname}} {{Student.patronymic}} "></td>
+        <td><input type="text" value="{{Student.lastname}}"></td>
+        <td><input type="text" value="{{Student.firstname}} {{Student.patronymic}}"></td>
+        <td><input type="text" value="{{Student.lastname_en}}"></td>
+        <td><input type="text" value="{{Student.firstname_en}} {{Student.patronymic_en}}"></td>
+        <td><input type="datetime" value="{{Student.BirthDate}}"></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value="{{Student.nomerAttestata}}"></td>
+        <td><input type="text" value="{{Student.dataVydachiAttestata}}"></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value="{{Student.enterexamsen}}"></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value=""></td>
+        <td><input type="text" value="{{Student.StartDate}}"></td>
+        <td><input type="text" value=""></td>
+
+
+    </tr>
+    {% endfor %} 
+</table> 
+
+<script type="text/javascript" rrc="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{% endblock content %}

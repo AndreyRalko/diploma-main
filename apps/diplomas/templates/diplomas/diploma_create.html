@@ -1,0 +1,20 @@
+{% extends "_base.html" %}
+
+{% load static crispy_forms_tags %}
+
+{% block title %}
+    Создание диплома
+{% endblock title %}
+
+{% block content %}
+    <script type="text/javascript"
+            src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    <div class="diploma-form">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Создать</button>
+        </form>
+    </div>
+    {{ form.media }}
+{% endblock content %}

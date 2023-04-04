@@ -1,0 +1,25 @@
+{% extends "_base.html" %}
+
+{% load static crispy_forms_tags %}
+
+{% block title %}
+    Редактирование диплома {{ object.lastname_kk }} {{ object.firstname_kk }}
+{% endblock title %}
+
+{% block content %}
+    <script type="text/javascript"
+            src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    <style>
+        .container {
+            max-width: 960px;
+        }
+    </style>
+    <div class="diploma-form">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit" class="btn btn-primary">Сохранить</button>
+        </form>
+    </div>
+    {{ form.media }}
+{% endblock content %}

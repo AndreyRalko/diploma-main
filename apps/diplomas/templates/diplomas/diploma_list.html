@@ -1,0 +1,134 @@
+{% extends "_base.html" %}
+
+{% load static crispy_forms_tags url_params_tags %}
+
+{% block title %}
+    Дипломы
+{% endblock title %}
+
+{% block content %}
+    <style>
+        #div_id_specialty {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .table a {
+            text-decoration: none;
+        }
+    </style>
+    <script type="text/javascript"
+            src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    <div class="accordion mb-4" id="accordionExample">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="diploma-search-accordion">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapse"
+                        aria-expanded="false"
+                        aria-controls="collapse">
+                    Поиск сгенерированных дипломов
+                </button>
+            </h2>
+            <div id="collapse"
+                 class="accordion-collapse collapse {% if request.GET %}show{% endif %}"
+                 aria-labelledby="heading"
+                 data-bs-parent="#accordionExample">
+                <div class="accordion-body">
+                    <div class="diploma-form">
+                        <form action="" method="get">
+                            {{ filterset.form|crispy }}
+                            <button type="submit" class="btn btn-primary">Поиск</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Имя</th>
+                    <th scope="col">Фамилия</th>
+                    <th scope="col">ИИН</th>
+                    <th scope="col">Присуждаемая степень</th>
+                    <th scope="col">Специальность</th>
+                    <th scope="col">Статус</th>
+                    {% if user.is_superuser %}<th scope="col">Сгенерирован</th>{% endif %}
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for diploma in object_list %}
+                    <tr style="border-left: thick double {% if diploma.is_honors %}#F08080{% else %}#1B6CFF{% endif %}">
+                        <td>
+                            <a href="{% url 'diploma_detail' diploma.id %}">{{ diploma.firstname_kk }}</a>
+                        </td>
+                        <td>
+                            <a href="{% url 'diploma_detail' diploma.id %}">{{ diploma.lastname_kk }}</a>
+                        </td>
+                        <th scope="row">
+                            <a href="{% url 'diploma_detail' diploma.id %}">{{ diploma.iin }}</a>
+                        </th>
+                        <td>{{ diploma.conferred_degree.name_kk }} {{ diploma.degree.name_kk|lower }}</td>
+                        <td>{{ diploma.specialty }}</td>
+                        <td>{{ diploma.get_status_display }}</td>
+                        {% if user.is_superuser %}<td>{{ diploma.generated_by.email }}</td>{% endif %}
+                        <td>
+                            <a href="{% url 'diploma_update' diploma.id %}"
+                               class="btn btn-outline-warning">Редактировать</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% if page_obj.has_other_pages %}
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?{% param_replace page=1 %}">Первая</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?{% param_replace page=page_obj.previous_page_number %}">Предыдущая</a>
+                        </li>
+                    {% endif %}
+                    {% for page_number in page_obj.paginator.page_range %}
+                        {% comment %}
+                    This conditional allows us to display up to 3 pages before and after the current page
+                    If you decide to remove this conditional, all the pages will be displayed
+
+                    You can change the 3 to any number you want e.g
+                    To display only 5 pagination items, change the 3 to 2 (2 before and 2 after the current page)
+                        {% endcomment %}
+                        {% if page_number <= page_obj.number|add:3 and page_number >= page_obj.number|add:-3 %}
+                            {% if page_obj.number == page_number %}
+                                <li class="page-item active">
+                                    <a class="page-link" disabled>{{ page_number }}</a>
+                                </li>
+                            {% else %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?{% param_replace page=page_number %}">{{ page_number }}</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?{% param_replace page=page_obj.next_page_number %}">Следующая</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?{% param_replace page=paginator.num_pages %}">Последняя</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    </div>
+    {{ filterset.form.media }}
+{% endblock content %}
